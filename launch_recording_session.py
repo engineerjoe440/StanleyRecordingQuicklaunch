@@ -8,7 +8,6 @@ import subprocess
 from pathlib import Path
 
 from pipewire_python import link as pw
-from pipewire_python.link import StereoInput
 
 
 REAPER_TEMPLATE = "DualChannelRecording.RPP"
@@ -32,6 +31,18 @@ class PipeWireSession:
 
     def __init__(self):
         """Load PipeWire Link Information."""
+        self.reaper_device = None
         for link in pw.list_links():
-            if link.input.device == REAPER_DEVICE_NAME:
-                pass
+            for input_device in link.inputs:
+                if input_device.device == REAPER_DEVICE_NAME:
+                    # Track the REAPER Interface
+                    link.disconnect()
+                    self.reaper_device = input_device
+        if self.reaper_device is None:
+            raise ValueError("Cannot Locate Reaper Interface.")
+        print(self.reaper_device)
+
+
+if __name__ == "__main__":
+    launch_reaper()
+    session = PipeWireSession()
