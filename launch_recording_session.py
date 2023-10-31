@@ -26,6 +26,7 @@ ZOOM_DEVICE_NAME = "ZOOM VoiceEngine"
 def launch_reaper():
     """Launch the Reaper Application with the Appropriate Template."""
     subprocess.Popen([
+        "pw-jack", # Use Pipewire Jack
         "reaper",
         "-template",
         str(TEMPLATE_PATH.joinpath(REAPER_TEMPLATE)),
