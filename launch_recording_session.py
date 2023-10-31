@@ -11,7 +11,7 @@ from pathlib import Path
 from pipewire_python import link as pw
 
 
-REAPER_TEMPLATE = "DualChannelRecording.RPP"
+REAPER_TEMPLATE = "MultiChannelRecording.RPP"
 TEMPLATE_PATH = Path("~/.config/REAPER/ProjectTemplates/").expanduser()
 
 REAPER_DEVICE_NAME = "REAPER"
@@ -42,8 +42,8 @@ class PipeWireSession:
 
     def __init__(self):
         """Load PipeWire Link Information."""
-        self.reaper_device_left = None
-        self.reaper_device_right = None
+        self.num_reaper_inputs = 4
+        self.reaper_devices = [None] * self.num_reaper_inputs
         self.zoom_output_left = None
         self.zoom_output_right = None
         self.digital_left = None
@@ -63,10 +63,9 @@ class PipeWireSession:
                         # Disconnect Existing Links
                         link.disconnect()
                         # Track the REAPER Interface
-                        if "FR" in link_group.common_name.upper():
-                            self.reaper_device_right = link.input
-                        if "FL" in link_group.common_name.upper():
-                            self.reaper_device_left = link.input
+                        for input_idx in range(self.num_reaper_inputs):
+                            if link_group.common_name == f"in{input_idx + 1}":
+                                self.reaper_devices[input_idx] = link.input
             if link_group.common_device == ZOOM_DEVICE_NAME:
                 for link in link_group.links:
                     if link.output.device == ZOOM_DEVICE_NAME:
@@ -88,7 +87,7 @@ class PipeWireSession:
                         if "FL" in link_group.common_name.upper():
                             self.digital_left = link.output
         # Confirm Reaper Connections were Found
-        if self.reaper_device_left is None or self.reaper_device_right is None:
+        if not any(self.reaper_devices):
             raise ValueError("Cannot Locate Reaper Interface.")
 
     def connect_analog_input(self):
@@ -105,13 +104,13 @@ class PipeWireSession:
             id=0,
             port_type=pw.PortType.OUTPUT
         )
-        analog_left.connect(self.reaper_device_left)
-        analog_right.connect(self.reaper_device_left)
+        analog_left.connect(self.reaper_devices[0])
+        analog_right.connect(self.reaper_devices[0])
 
     def connect_digital_input(self):
         """Connect the Digital Input."""
-        self.digital_left.connect(self.reaper_device_right)
-        self.digital_right.connect(self.reaper_device_right)
+        self.digital_left.connect(self.reaper_devices[1])
+        self.digital_right.connect(self.reaper_devices[1])
 
     def connect_easy_effects_zoom(self):
         """Connect the Zoom Output to Easy Effects if Zoom is Already Started."""
