@@ -1,0 +1,2 @@
+pulsectl>=23.5.2
+git+https://github.com/engineerjoe440/pipewire_python.git@feature/link-to-stereo-inout-devices
