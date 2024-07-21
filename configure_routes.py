@@ -8,7 +8,7 @@ from pipewire_python import link as pw
 
 REAPER_DEVICE_NAME = "REAPER"
 
-ANALOG_INPUT_DEVICE_NAME = "alsa_input.usb-BurrBrown_from_Texas_Instruments_USB_AUDIO_CODEC-00.analog-stereo"
+ANALOG_INPUT_DEVICE_NAME = "alsa_input.usb-Focusrite_Scarlett_2i2_USB_Y84VV8731F7826-00.pro-input-0"
 ANALOG_OUTPUT_DEVICE_NAME = "alsa_output.usb-BurrBrown_from_Texas_Instruments_USB_AUDIO_CODEC-00.analog-stereo"
 EASY_EFFECTS_INPUT_DEVICE_NAME = "easyeffects_sink"
 EASY_EFFECTS_OUTPUT_DEVICE_NAME = "ee_soe_output_level"
@@ -80,13 +80,7 @@ class PipeWireSession:
         )
         pw.Output(
             device=ANALOG_INPUT_DEVICE_NAME,
-            name="capture_FL",
-            id=0,
-            port_type=pw.PortType.OUTPUT
-        ).connect(reaper_port)
-        pw.Output(
-            device=ANALOG_INPUT_DEVICE_NAME,
-            name="capture_FR",
+            name="capture_AUX0",
             id=0,
             port_type=pw.PortType.OUTPUT
         ).connect(reaper_port)
