@@ -1,3 +1,4 @@
+#!/home/joestan/stanleypadconfig/StreamDeck/StanleyRecordingQuicklaunch/venv/bin/python
 ################################################################################
 """
 Start a new Reaper recording session with the appropriate PipeWire Configuration

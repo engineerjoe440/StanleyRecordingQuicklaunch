@@ -1,3 +1,4 @@
+#!/home/joestan/stanleypadconfig/StreamDeck/StanleyRecordingQuicklaunch/venv/bin/python
 ################################################################################
 """
 Start a new Reaper recording session with the appropriate PipeWire Configuration
@@ -8,8 +9,8 @@ from pipewire_python import link as pw
 
 REAPER_DEVICE_NAME = "REAPER"
 
-ANALOG_INPUT_DEVICE_NAME = "alsa_input.usb-Focusrite_Scarlett_2i2_USB_Y84VV8731F7826-00.pro-input-0"
-ANALOG_OUTPUT_DEVICE_NAME = "alsa_output.usb-BurrBrown_from_Texas_Instruments_USB_AUDIO_CODEC-00.analog-stereo"
+ANALOG_INPUT_DEVICE_NAME = "alsa_input.usb-TASCAM_Model_12_no_serial_number-00.pro-input-0"
+ANALOG_OUTPUT_DEVICE_NAME = "alsa_output.usb-TASCAM_Model_12_no_serial_number-00.pro-output-0"
 EASY_EFFECTS_INPUT_DEVICE_NAME = "easyeffects_sink"
 EASY_EFFECTS_OUTPUT_DEVICE_NAME = "ee_soe_output_level"
 SOUNDUX_SINK_OUTPUT_DEVICE_NAME = "soundux_sink"
@@ -147,13 +148,13 @@ class PipeWireSession:
         try:
             analog_output_left = pw.Input(
                 device=ANALOG_OUTPUT_DEVICE_NAME,
-                name="playback_FL",
+                name="playback_AUX0",
                 id=0,
                 port_type=pw.PortType.INPUT
             )
             analog_output_right = pw.Input(
                 device=ANALOG_OUTPUT_DEVICE_NAME,
-                name="playback_FR",
+                name="playback_AUX0",
                 id=0,
                 port_type=pw.PortType.INPUT
             )
