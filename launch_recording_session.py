@@ -1,10 +1,11 @@
-#!/home/joestan/stanleypadconfig/StreamDeck/StanleyRecordingQuicklaunch/venv/bin/python
+#!./venv/bin/python3
 ################################################################################
 """
 Start a new Reaper recording session with the appropriate PipeWire Configuration
 """
 ################################################################################
 
+import re
 import subprocess
 import time
 from pathlib import Path
@@ -48,11 +49,30 @@ def set_audio_levels():
             if stream.name == "Playback":
                 pulse.volume_set_all_chans(stream, REMOTE_VOLUME)
 
+def find_process(process_name: str):
+    """Find the Process in the System Output."""
+    with subprocess.Popen(
+        f"ps -eaf | grep {process_name}",
+        shell=True,
+        encoding='utf8',
+        stdout=subprocess.PIPE,
+    ) as proc:
+        output = proc.stdout.read()
+
+    return output
+
+def is_proc_running(process_name: str):
+    """Check if the Process is Running."""
+    output = find_process(process_name)
+
+    return bool(re.search(process_name, output))
 
 if __name__ == "__main__":
     launch_soundux()
     launch_easy_effects()
     set_audio_levels()
     launch_reaper()
-    time.sleep(5)
+    while not is_proc_running(process_name="reaper"):
+        time.sleep(2)
+    time.sleep(15)
     session = PipeWireSession()
